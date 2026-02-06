@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine’s Countdown</title>
+
+  <!-- 🔥 reuse existing styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #ffe6e6;
+    font-family: 'Arial', sans-serif;
+    color: #ff4d6d;
+    overflow: hidden; /* prevent scrollbars for hearts */
+    text-align: center;
+    }
+
+    #countdown {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ff4d6d;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      top: -50px;
+      font-size: 3rem;
+      color: #ff4d6d;
+      opacity: 0.8;
+      animation: floatDown linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatDown {
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 id="giftTitle">Your gift will be ready in ...</h1>
+
+    <div id="countdown">Loading...</div>
+
+    <div class="buttons">
+      <button onclick="goBack()">Back 💕</button>
+    </div>
+  </div>
+
+  <script>
+    // 🎁 Gift stage logic
+    const stage = parseInt(localStorage.getItem("giftStage")) || 1;
+    const giftTitle = document.getElementById("giftTitle");
+
+    if (stage === 1) giftTitle.innerText = "🎁 First gift is being prepared...";
+    if (stage === 2) giftTitle.innerText = "🎁 Second gift is on the way...";
+    if (stage === 3) giftTitle.innerText = "🎁 Third gift is almost ready...";
+
+    // ⏱ Countdown timer (UNCHANGED)
+    const targetDate = new Date("2026-02-14 00:00:00").getTime();
+    const countdownElement = document.getElementById("countdown");
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdownElement.innerHTML = "❤️ Happy Valentine’s Day! ❤️";
+        clearInterval(interval);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    const interval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // ❤️ Floating hearts (UNCHANGED)
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = 20 + Math.random() * 30 + "px";
+      heart.style.animationDuration = 4 + Math.random() * 3 + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 7000);
+    }
+
+    setInterval(createHeart, 300);
+  </script>
+
+  <script src="script.js"></script>
+</body>
