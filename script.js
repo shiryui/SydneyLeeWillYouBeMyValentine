@@ -37,6 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "gift3.html"; }
   ;
 
+  window.goBack = function () { 
+    window.location.href = "index.html"; }
+  ;
+
+
   /* =========================
      🎁 GIFT SEQUENCE LOGIC
      ========================= */
